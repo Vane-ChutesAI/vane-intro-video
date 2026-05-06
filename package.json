@@ -1,8 +1,11 @@
 {
   "name": "vane-intro-video",
   "version": "1.0.0",
-  "description": "My Remotion video",
-  "repository": {},
+  "description": "Remotion-built intro video for Vane and the Chutes.ai team demo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vane-ChutesAI/vane-intro-video.git"
+  },
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {

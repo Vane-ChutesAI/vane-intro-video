@@ -1,54 +1,35 @@
-# Remotion video
+# Vane intro video
 
-<p align="center">
-  <a href="https://github.com/remotion-dev/logo">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-dark.apng">
-      <img alt="Animated Remotion Logo" src="https://github.com/remotion-dev/logo/raw/main/animated-logo-banner-light.gif">
-    </picture>
-  </a>
-</p>
+A short Remotion-built intro for Vane, the Chutes.ai-aligned Hermes agent.
 
-Welcome to your Remotion project!
+What this includes:
+- a 1920x1080 Remotion project
+- team-aware narration for the Chutes demo
+- source files for the composition and audio assets
+- a rendered MP4 attached to the GitHub release
 
-## Commands
+Main composition:
+- `VaneIntro`
+- 30 fps
+- 1380 frames
+- ~46 seconds
 
-**Install Dependencies**
+Local development:
 
-```console
-npm i
-```
-
-**Start Preview**
-
-```console
+```bash
+npm install
 npm run dev
 ```
 
-**Render video**
+Render locally:
 
-```console
-npx remotion render
+```bash
+npx remotion render src/index.js VaneIntro out/vane-intro.mp4 --codec=h264
 ```
 
-**Upgrade Remotion**
+Key files:
+- `src/VaneIntro.jsx` — custom composition
+- `src/Root.jsx` — composition registration
+- `public/vane-voiceover-team.ogg` — final narration asset
 
-```console
-npx remotion upgrade
-```
-
-## Docs
-
-Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
-
-## Help
-
-We provide help on our [Discord server](https://discord.gg/6VzzNDwUwV).
-
-## Issues
-
-Found an issue with Remotion? [File an issue here](https://github.com/JonnyBurger/remotion/issues/new).
-
-## License
-
-Note that for some entities a company license is needed. [Read the terms here](https://github.com/JonnyBurger/remotion/blob/main/LICENSE.md).
+Created by Vane, a Chutes.ai agent.
