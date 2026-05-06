@@ -1,186 +1,562 @@
 import React from "react";
 import {
   AbsoluteFill,
-  Html5Audio,
+  Img,
   interpolate,
-  interpolateColors,
   spring,
   staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
 
+const BRAND = {
+  bg: "#05070d",
+  panel: "rgba(10, 14, 24, 0.78)",
+  panelBorder: "rgba(255, 255, 255, 0.08)",
+  text: "#f8fafc",
+  muted: "rgba(226, 232, 240, 0.76)",
+  subtext: "rgba(148, 163, 184, 0.88)",
+  mint: "#b9ff66",
+  lime: "#d9ff72",
+  purple: "#8b5cf6",
+  violet: "#c084fc",
+  cyan: "#38bdf8",
+  blue: "#60a5fa",
+  amber: "#fbbf24",
+  coral: "#fb7185",
+};
+
 const scenes = [
   {
     start: 0,
-    end: 210,
+    end: 180,
     eyebrow: "MEET VANE",
-    title: "A Hermes agent for Chutes.ai",
-    body: "Persistent context. Live tools. Real execution.",
+    title: "A Hermes agent built for Chutes.ai",
+    body: "Persistent context, live tools, and real execution for the team.",
     chips: ["Research", "Writing", "Automation"],
+    metrics: [
+      ["Mode", "Execution"],
+      ["Context", "Persistent"],
+      ["Tools", "Live"],
+      ["Output", "Usable"],
+    ],
     statLabel: "Role",
-    statValue: "Execution layer",
+    statValue: "Operator layer",
   },
   {
-    start: 210,
-    end: 480,
+    start: 180,
+    end: 390,
+    eyebrow: "WHAT CHUTES IS",
+    title: "Serverless AI compute for open models",
+    body: "Production-scale inference, confidential compute through TEEs, and deep Bittensor roots.",
+    chips: ["Open-source", "Serverless", "TEE", "Bittensor"],
+    metrics: [
+      ["Scale", "Production"],
+      ["Privacy", "Verified"],
+      ["Models", "Open"],
+      ["Speed", "Fast launch"],
+    ],
+    statLabel: "Positioning",
+    statValue: "Private AI at scale",
+  },
+  {
+    start: 390,
+    end: 690,
     eyebrow: "TEAM CONTEXT",
-    title: "I already know some of the room",
-    body: "Sirouk: backend and systems. Timon: sales and customer success. Kyle: TEE and secure inference. Rykorb and Vonkaiser: deep technical work. Vince: product story, launches, and coordination.",
-    chips: ["Sirouk", "Algowary", "Kyle", "Rykorb", "Vonkaiser", "Vince"],
-    statLabel: "State",
-    statValue: "Team-aware",
+    title: "I already know the room",
+    body: "I can start with real team context instead of a blank page, and work in the lanes that already exist inside Chutes.",
+    chips: ["Backend", "Frontend", "Sales", "Marketing", "Technical"],
+    panel: "roster",
+    statLabel: "Known roster",
+    statValue: "10 teammates",
   },
   {
-    start: 480,
-    end: 780,
-    eyebrow: "INSPECT + VERIFY",
-    title: "I inspect, research, and verify",
-    body: "Websites, signup paths, SEO surfaces, competitors, and messaging gaps.",
-    chips: ["Live web", "Competitors", "Trust surface"],
-    statLabel: "Output",
-    statValue: "Checked findings",
+    start: 690,
+    end: 900,
+    eyebrow: "WHAT I DO",
+    title: "Inspect. Verify. Write. Organize.",
+    body: "Websites, product flows, SEO surfaces, competitor claims, GitHub tasks, Notion hubs, and recurring ops.",
+    chips: ["Live web", "SEO", "GitHub", "Notion"],
+    metrics: [
+      ["Web", "Inspect"],
+      ["Claims", "Verify"],
+      ["Content", "Draft"],
+      ["Ops", "Automate"],
+    ],
+    statLabel: "Default output",
+    statValue: "Checked work",
   },
   {
-    start: 780,
-    end: 1110,
-    eyebrow: "WRITE + ORGANIZE",
-    title: "I turn ideas into usable assets",
-    body: "SEO-ready blogs, Notion hubs, GitHub tasks, terminal work, and recurring workflows.",
-    chips: ["Blogs", "Notion", "GitHub", "Automation"],
-    statLabel: "Formats",
-    statValue: "Docs, plans, copy",
-  },
-  {
-    start: 1110,
-    end: 1380,
-    eyebrow: "PROMPT TO OUTPUT",
-    title: "Give me the messy request",
-    body: "I will turn it into checked output for the Chutes team.",
-    chips: ["Research", "Execution", "Coordination"],
-    statLabel: "Promise",
-    statValue: "From ask to asset",
-  },
-];
-
-const captions = [
-  {
-    start: 0,
-    end: 150,
-    text: "Hi team, I am Vane, a Hermes agent aligned to Chutes.ai.",
-  },
-  {
-    start: 150,
-    end: 480,
-    text: "I already know some of the room: Sirouk on backend and systems, Timon on sales and customer success, Kyle on TEE, Rykorb and Vonkaiser on deep technical work, and Vince on launches and coordination.",
-  },
-  {
-    start: 480,
-    end: 610,
-    text: "I do more than talk.",
-  },
-  {
-    start: 610,
-    end: 850,
-    text: "I can inspect live websites and product flows, research competitors, and draft SEO-ready content.",
-  },
-  {
-    start: 850,
+    start: 900,
     end: 1080,
-    text: "I can organize work in Notion, use GitHub and the terminal, and automate recurring tasks.",
-  },
-  {
-    start: 1080,
-    end: 1320,
-    text: "Give me a messy request, and I will turn it into checked output for the Chutes team.",
-  },
-  {
-    start: 1320,
-    end: 1380,
-    text: "Ready when you are.",
+    eyebrow: "FROM ASK TO ASSET",
+    title: "Turn the messy request into something usable",
+    body: "Strategy docs, launch assets, research, planning, and repeatable workflows for the Chutes team.",
+    chips: ["Launches", "Docs", "Planning", "Workflows"],
+    metrics: [
+      ["Style", "Action-first"],
+      ["Scope", "Team-wide"],
+      ["Format", "Deliverable"],
+      ["Speed", "Same session"],
+    ],
+    statLabel: "Promise",
+    statValue: "Prompt to output",
   },
 ];
 
-const chipStyle = {
-  padding: "12px 20px",
-  borderRadius: 999,
-  fontSize: 24,
-  fontWeight: 600,
-  letterSpacing: "0.02em",
-  color: "rgba(236, 240, 255, 0.92)",
-  background: "rgba(129, 140, 248, 0.14)",
-  border: "1px solid rgba(167, 139, 250, 0.28)",
-  boxShadow: "0 0 0 1px rgba(255,255,255,0.03) inset",
-};
+const footnotes = [
+  {start: 0, end: 180, text: "Persistent context + live tools + real execution."},
+  {start: 180, end: 390, text: "Branded for Chutes: dark mode, mint accents, holographic cubes."},
+  {start: 390, end: 690, text: "Team-aware by default: backend, launches, sales, marketing, and technical staff."},
+  {start: 690, end: 900, text: "Inspect the live surface. Verify the claim. Turn it into usable work."},
+  {start: 900, end: 1080, text: "Give Vane the rough prompt. Get a checked asset back."},
+];
+
+const teamGroups = [
+  {
+    label: "Backend",
+    names: "Jon, Cxmplex, Florian, Kyle, Chris / Sirouk",
+    color: BRAND.mint,
+  },
+  {
+    label: "Frontend + launches",
+    names: "Vince / Veight",
+    color: BRAND.cyan,
+  },
+  {
+    label: "Sales + customer success",
+    names: "Timon / Algowary",
+    color: BRAND.purple,
+  },
+  {
+    label: "Marketing + community",
+    names: "Fezicles",
+    color: BRAND.amber,
+  },
+  {
+    label: "Technical staff",
+    names: "Rykorb, Vonkaiser",
+    color: BRAND.coral,
+  },
+];
+
+const chipColors = [
+  "rgba(185,255,102,0.16)",
+  "rgba(56,189,248,0.14)",
+  "rgba(139,92,246,0.16)",
+  "rgba(251,191,36,0.14)",
+];
 
 const cardBase = {
-  borderRadius: 36,
-  border: "1px solid rgba(148, 163, 184, 0.18)",
-  background: "linear-gradient(180deg, rgba(15,23,42,0.84), rgba(15,23,42,0.58))",
-  boxShadow: "0 28px 80px rgba(2, 6, 23, 0.42), inset 0 0 0 1px rgba(255,255,255,0.03)",
-  backdropFilter: "blur(14px)",
+  borderRadius: 34,
+  border: `1px solid ${BRAND.panelBorder}`,
+  background: `linear-gradient(180deg, rgba(11,16,29,0.92), ${BRAND.panel})`,
+  boxShadow:
+    "0 30px 90px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255,255,255,0.02)",
+  backdropFilter: "blur(18px)",
 };
 
-const Caption = ({text}) => {
+const ChipRow = ({chips}) => {
   return (
     <div
       style={{
-        ...cardBase,
-        padding: "22px 28px",
-        minHeight: 132,
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 16,
+        maxWidth: 900,
+      }}
+    >
+      {chips.map((chip, index) => (
+        <div
+          key={chip}
+          style={{
+            padding: "12px 20px",
+            borderRadius: 999,
+            fontSize: 23,
+            fontWeight: 650,
+            color: BRAND.text,
+            background: chipColors[index % chipColors.length],
+            border: `1px solid ${index % 2 === 0 ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.08)"}`,
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.02)",
+          }}
+        >
+          {chip}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const Footer = ({frame, fps, durationInFrames, text}) => {
+  return (
+    <div
+      style={{
+        marginTop: 26,
+        display: "grid",
+        gridTemplateColumns: "1.45fr 0.9fr",
+        gap: 26,
+        alignItems: "end",
       }}
     >
       <div
         style={{
-          height: 3,
-          width: 82,
-          borderRadius: 999,
-          marginBottom: 16,
-          background: "linear-gradient(90deg, #67e8f9, #a78bfa)",
-        }}
-      />
-      <div
-        style={{
-          fontSize: 30,
-          lineHeight: 1.28,
-          color: "rgba(241, 245, 249, 0.96)",
-          fontWeight: 520,
+          ...cardBase,
+          padding: "20px 26px",
+          minHeight: 116,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
-        {text}
+        <div
+          style={{
+            height: 4,
+            width: 92,
+            borderRadius: 999,
+            marginBottom: 16,
+            background:
+              "linear-gradient(90deg, rgba(185,255,102,1) 0%, rgba(56,189,248,1) 45%, rgba(139,92,246,1) 100%)",
+          }}
+        />
+        <div
+          style={{
+            fontSize: 30,
+            lineHeight: 1.25,
+            color: BRAND.text,
+            fontWeight: 560,
+          }}
+        >
+          {text}
+        </div>
+      </div>
+
+      <div style={{...cardBase, padding: "22px 24px"}}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: 14,
+            color: BRAND.subtext,
+            fontWeight: 700,
+            fontSize: 17,
+            letterSpacing: "0.16em",
+          }}
+        >
+          <span>PROGRESS</span>
+          <span>{String(Math.floor(frame / fps)).padStart(2, "0")}s</span>
+        </div>
+        <div
+          style={{
+            height: 14,
+            borderRadius: 999,
+            background: "rgba(15, 23, 42, 0.95)",
+            overflow: "hidden",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.04)",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              width: `${(frame / durationInFrames) * 100}%`,
+              borderRadius: 999,
+              background:
+                "linear-gradient(90deg, #b9ff66 0%, #38bdf8 32%, #8b5cf6 68%, #fbbf24 100%)",
+              boxShadow: "0 0 28px rgba(185,255,102,0.28)",
+            }}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-const Equalizer = ({frame}) => {
+const MetricGrid = ({metrics}) => {
   return (
     <div
       style={{
-        display: "flex",
-        alignItems: "flex-end",
-        gap: 10,
-        height: 84,
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 16,
       }}
     >
-      {new Array(10).fill(true).map((_, i) => {
-        const height = 20 + Math.abs(Math.sin(frame / 7 + i * 0.8)) * 60;
-        const color = interpolateColors(i, [0, 9], ["#67e8f9", "#a78bfa"]);
-
-        return (
+      {metrics.map(([label, value], index) => (
+        <div
+          key={label}
+          style={{
+            borderRadius: 22,
+            padding: "18px 18px 16px 18px",
+            background:
+              index % 4 === 0
+                ? "rgba(185,255,102,0.10)"
+                : index % 4 === 1
+                  ? "rgba(56,189,248,0.10)"
+                  : index % 4 === 2
+                    ? "rgba(139,92,246,0.11)"
+                    : "rgba(251,191,36,0.10)",
+            border: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
           <div
-            key={i}
             style={{
-              width: 10,
-              height,
-              borderRadius: 999,
-              background: color,
-              boxShadow: `0 0 18px ${color}`,
-              opacity: 0.88,
+              fontSize: 14,
+              letterSpacing: "0.16em",
+              fontWeight: 700,
+              color: BRAND.subtext,
+              marginBottom: 9,
             }}
-          />
-        );
-      })}
+          >
+            {label}
+          </div>
+          <div
+            style={{
+              fontSize: 24,
+              lineHeight: 1.1,
+              fontWeight: 700,
+              color: BRAND.text,
+            }}
+          >
+            {value}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const BrandImagePanel = ({frame, metrics, statLabel, statValue}) => {
+  const floatY = Math.sin(frame / 28) * 12;
+  const rotate = Math.sin(frame / 44) * 4;
+
+  return (
+    <div
+      style={{
+        ...cardBase,
+        padding: 26,
+        width: "100%",
+        minHeight: 470,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        overflow: "hidden",
+      }}
+    >
+      <div>
+        <div
+          style={{
+            fontSize: 16,
+            letterSpacing: "0.18em",
+            fontWeight: 700,
+            color: BRAND.subtext,
+            marginBottom: 18,
+          }}
+        >
+          CHUTES.AI VISUAL SYSTEM
+        </div>
+        <div
+          style={{
+            fontSize: 28,
+            color: BRAND.subtext,
+            marginBottom: 8,
+          }}
+        >
+          {statLabel}
+        </div>
+        <div
+          style={{
+            fontSize: 56,
+            lineHeight: 1.02,
+            fontWeight: 760,
+            color: BRAND.text,
+            marginBottom: 20,
+          }}
+        >
+          {statValue}
+        </div>
+      </div>
+
+      <div
+        style={{
+          position: "relative",
+          height: 210,
+          borderRadius: 28,
+          overflow: "hidden",
+          marginBottom: 22,
+          background:
+            "radial-gradient(circle at 24% 24%, rgba(185,255,102,0.22), rgba(185,255,102,0) 34%), radial-gradient(circle at 76% 22%, rgba(139,92,246,0.32), rgba(139,92,246,0) 36%), linear-gradient(135deg, rgba(9,14,24,0.98), rgba(14,23,42,0.96))",
+          border: "1px solid rgba(255,255,255,0.08)",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(135deg, rgba(185,255,102,0.12), rgba(56,189,248,0.06) 35%, rgba(139,92,246,0.12) 72%, rgba(251,191,36,0.10) 100%)",
+          }}
+        />
+        <Img
+          src={staticFile("chutes-cubes.png")}
+          style={{
+            position: "absolute",
+            right: -10,
+            bottom: -14,
+            width: 300,
+            transform: `translateY(${floatY}px) rotate(${rotate}deg)`,
+            filter: "drop-shadow(0 28px 52px rgba(0,0,0,0.42))",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: 22,
+            top: 24,
+            width: 176,
+          }}
+        >
+          <div
+            style={{
+              fontSize: 15,
+              letterSpacing: "0.16em",
+              color: BRAND.subtext,
+              marginBottom: 12,
+              fontWeight: 700,
+            }}
+          >
+            BRAND CUES
+          </div>
+          <div style={{display: "flex", flexDirection: "column", gap: 10}}>
+            {[
+              ["Dark mode", BRAND.text],
+              ["Mint action accents", BRAND.mint],
+              ["Holographic cubes", BRAND.violet],
+            ].map(([label, color]) => (
+              <div
+                key={label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  fontSize: 18,
+                  color: BRAND.text,
+                  fontWeight: 560,
+                }}
+              >
+                <div
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: 999,
+                    background: color,
+                    boxShadow: `0 0 18px ${color}`,
+                  }}
+                />
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <MetricGrid metrics={metrics} />
+    </div>
+  );
+};
+
+const TeamRosterPanel = ({statLabel, statValue}) => {
+  return (
+    <div
+      style={{
+        ...cardBase,
+        padding: 24,
+        width: "100%",
+        minHeight: 470,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div
+        style={{
+          fontSize: 16,
+          letterSpacing: "0.18em",
+          fontWeight: 700,
+          color: BRAND.subtext,
+          marginBottom: 18,
+        }}
+      >
+        TEAM SNAPSHOT
+      </div>
+      <div
+        style={{
+          fontSize: 26,
+          color: BRAND.subtext,
+          marginBottom: 8,
+        }}
+      >
+        {statLabel}
+      </div>
+      <div
+        style={{
+          fontSize: 56,
+          lineHeight: 1.02,
+          fontWeight: 760,
+          color: BRAND.text,
+          marginBottom: 20,
+        }}
+      >
+        {statValue}
+      </div>
+
+      <div style={{display: "flex", flexDirection: "column", gap: 12, flex: 1}}>
+        {teamGroups.map((group) => (
+          <div
+            key={group.label}
+            style={{
+              borderRadius: 22,
+              padding: "16px 18px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              boxShadow: "inset 4px 0 0 0 transparent",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: 5,
+                background: group.color,
+              }}
+            />
+            <div
+              style={{
+                fontSize: 15,
+                letterSpacing: "0.14em",
+                fontWeight: 700,
+                color: group.color,
+                marginBottom: 8,
+                marginLeft: 4,
+              }}
+            >
+              {group.label}
+            </div>
+            <div
+              style={{
+                fontSize: 22,
+                lineHeight: 1.22,
+                color: BRAND.text,
+                fontWeight: 560,
+                marginLeft: 4,
+              }}
+            >
+              {group.names}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -199,7 +575,7 @@ const ScenePanel = ({scene, frame, fps}) => {
 
   const opacity = interpolate(
     frame,
-    [scene.start, scene.start + 18, scene.end - 18, scene.end],
+    [scene.start, scene.start + 16, scene.end - 18, scene.end],
     [0, 1, 1, 0],
     {
       extrapolateLeft: "clamp",
@@ -207,8 +583,8 @@ const ScenePanel = ({scene, frame, fps}) => {
     },
   );
 
-  const translateY = interpolate(entrance, [0, 1], [42, 0]);
-  const scale = interpolate(entrance, [0, 1], [0.96, 1]);
+  const translateY = interpolate(entrance, [0, 1], [38, 0]);
+  const scale = interpolate(entrance, [0, 1], [0.97, 1]);
 
   return (
     <div
@@ -218,12 +594,12 @@ const ScenePanel = ({scene, frame, fps}) => {
         opacity,
         transform: `translateY(${translateY}px) scale(${scale})`,
         display: "flex",
-        gap: 54,
+        gap: 52,
       }}
     >
       <div
         style={{
-          flex: 1.2,
+          flex: 1.18,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -231,155 +607,75 @@ const ScenePanel = ({scene, frame, fps}) => {
       >
         <div
           style={{
-            color: "#67e8f9",
-            fontWeight: 700,
-            letterSpacing: "0.18em",
-            fontSize: 24,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
             marginBottom: 24,
           }}
         >
-          {scene.eyebrow}
+          <div
+            style={{
+              width: 12,
+              height: 12,
+              borderRadius: 999,
+              background: BRAND.mint,
+              boxShadow: `0 0 18px ${BRAND.mint}`,
+            }}
+          />
+          <div
+            style={{
+              color: BRAND.mint,
+              fontWeight: 760,
+              letterSpacing: "0.18em",
+              fontSize: 22,
+            }}
+          >
+            {scene.eyebrow}
+          </div>
         </div>
         <div
           style={{
-            fontSize: 96,
-            lineHeight: 1,
-            fontWeight: 760,
-            color: "#f8fafc",
+            fontSize: 88,
+            lineHeight: 0.98,
+            fontWeight: 780,
+            color: BRAND.text,
             maxWidth: 900,
             marginBottom: 28,
-            textWrap: "balance",
           }}
         >
           {scene.title}
         </div>
         <div
           style={{
-            fontSize: 38,
-            lineHeight: 1.3,
-            color: "rgba(226, 232, 240, 0.86)",
-            maxWidth: 960,
-            marginBottom: 32,
+            fontSize: 35,
+            lineHeight: 1.28,
+            color: BRAND.muted,
+            maxWidth: 910,
+            marginBottom: 34,
           }}
         >
           {scene.body}
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: 16,
-            flexWrap: "wrap",
-            maxWidth: 920,
-          }}
-        >
-          {scene.chips.map((chip) => (
-            <div key={chip} style={chipStyle}>
-              {chip}
-            </div>
-          ))}
-        </div>
+        <ChipRow chips={scene.chips} />
       </div>
 
       <div
         style={{
-          width: 470,
+          width: 484,
           display: "flex",
           alignItems: "center",
         }}
       >
-        <div
-          style={{
-            ...cardBase,
-            padding: 34,
-            width: "100%",
-            minHeight: 440,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: 18,
-                letterSpacing: "0.2em",
-                fontWeight: 700,
-                color: "rgba(148, 163, 184, 0.82)",
-                marginBottom: 24,
-              }}
-            >
-              VANE // CHUTES TEAM
-            </div>
-            <div
-              style={{
-                fontSize: 28,
-                color: "rgba(148, 163, 184, 0.96)",
-                marginBottom: 10,
-              }}
-            >
-              {scene.statLabel}
-            </div>
-            <div
-              style={{
-                fontSize: 62,
-                lineHeight: 1.02,
-                fontWeight: 760,
-                color: "#f8fafc",
-                textWrap: "balance",
-              }}
-            >
-              {scene.statValue}
-            </div>
-          </div>
-
-          <div>
-            <Equalizer frame={frame} />
-            <div
-              style={{
-                marginTop: 24,
-                height: 1,
-                background: "rgba(148, 163, 184, 0.16)",
-              }}
-            />
-            <div
-              style={{
-                marginTop: 22,
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 18,
-              }}
-            >
-              {[
-                ["Mode", "Persistent"],
-                ["Tools", "Live"],
-                ["Output", "Checked"],
-                ["Style", "Action-first"],
-              ].map(([label, value]) => (
-                <div key={label}>
-                  <div
-                    style={{
-                      fontSize: 16,
-                      letterSpacing: "0.16em",
-                      color: "rgba(148, 163, 184, 0.82)",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {label}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 24,
-                      fontWeight: 650,
-                      color: "rgba(241, 245, 249, 0.96)",
-                    }}
-                  >
-                    {value}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        {scene.panel === "roster" ? (
+          <TeamRosterPanel statLabel={scene.statLabel} statValue={scene.statValue} />
+        ) : (
+          <BrandImagePanel
+            frame={frame}
+            metrics={scene.metrics}
+            statLabel={scene.statLabel}
+            statValue={scene.statValue}
+          />
+        )}
       </div>
     </div>
   );
@@ -389,62 +685,50 @@ export const VaneIntro = () => {
   const frame = useCurrentFrame();
   const {durationInFrames, fps} = useVideoConfig();
 
-  const backgroundShift = interpolate(frame, [0, durationInFrames], [0, 1]);
-  const caption = captions.find((c) => frame >= c.start && frame < c.end) ?? captions[captions.length - 1];
+  const backgroundShift = frame / durationInFrames;
+  const footer =
+    footnotes.find((entry) => frame >= entry.start && frame < entry.end) ?? footnotes[footnotes.length - 1];
 
   return (
     <AbsoluteFill
       style={{
-        background: "#030712",
-        color: "white",
+        background: BRAND.bg,
+        color: BRAND.text,
         fontFamily:
           'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         overflow: "hidden",
       }}
     >
-      <Html5Audio src={staticFile("vane-voiceover-team.ogg")} volume={0.92} />
-
       <AbsoluteFill
         style={{
-          background: `radial-gradient(circle at ${22 + backgroundShift * 8}% ${18 + backgroundShift * 6}%, rgba(103,232,249,0.18), rgba(3,7,18,0) 32%),
-            radial-gradient(circle at ${76 - backgroundShift * 5}% ${28 + backgroundShift * 8}%, rgba(167,139,250,0.18), rgba(3,7,18,0) 34%),
-            radial-gradient(circle at 50% 120%, rgba(56,189,248,0.12), rgba(3,7,18,0) 44%),
-            linear-gradient(135deg, #050816 0%, #0f172a 52%, #111827 100%)`,
+          background: `radial-gradient(circle at ${18 + backgroundShift * 10}% ${18 + backgroundShift * 4}%, rgba(185,255,102,0.18), rgba(185,255,102,0) 28%),
+            radial-gradient(circle at ${78 - backgroundShift * 8}% ${16 + backgroundShift * 10}%, rgba(139,92,246,0.22), rgba(139,92,246,0) 30%),
+            radial-gradient(circle at 78% 84%, rgba(251,191,36,0.12), rgba(251,191,36,0) 26%),
+            radial-gradient(circle at 26% 86%, rgba(56,189,248,0.16), rgba(56,189,248,0) 28%),
+            linear-gradient(145deg, #02040a 0%, #05070d 30%, #090f1b 100%)`,
         }}
       />
 
       <AbsoluteFill
         style={{
-          opacity: 0.34,
+          opacity: 0.18,
           backgroundImage:
-            "linear-gradient(rgba(148,163,184,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.10) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
-          transform: `translateY(${Math.sin(frame / 80) * 8}px)`,
+            "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
+          backgroundSize: "88px 88px",
+          transform: `translateY(${Math.sin(frame / 80) * 10}px)`,
         }}
       />
 
-      <div
+      <Img
+        src={staticFile("chutes-cubes.png")}
         style={{
           position: "absolute",
-          left: -180,
-          top: -180,
-          width: 520,
-          height: 520,
-          borderRadius: 999,
-          background: "radial-gradient(circle, rgba(103,232,249,0.20), rgba(103,232,249,0) 68%)",
-          filter: "blur(24px)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          right: -140,
-          bottom: -120,
-          width: 460,
-          height: 460,
-          borderRadius: 999,
-          background: "radial-gradient(circle, rgba(167,139,250,0.18), rgba(167,139,250,0) 68%)",
-          filter: "blur(22px)",
+          right: -150,
+          top: 90,
+          width: 760,
+          opacity: 0.1,
+          transform: `rotate(${8 + Math.sin(frame / 50) * 2}deg)`,
+          filter: "blur(1px)",
         }}
       />
 
@@ -452,7 +736,7 @@ export const VaneIntro = () => {
         style={{
           position: "absolute",
           inset: 0,
-          padding: "72px 86px 56px 86px",
+          padding: "64px 84px 54px 84px",
           display: "flex",
           flexDirection: "column",
         }}
@@ -462,29 +746,45 @@ export const VaneIntro = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: 34,
+            marginBottom: 30,
           }}
         >
           <div
             style={{
-              ...chipStyle,
-              fontSize: 20,
-              padding: "10px 18px",
-              background: "rgba(8, 47, 73, 0.42)",
-              color: "#cffafe",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "12px 20px",
+              borderRadius: 999,
+              background: "rgba(185,255,102,0.12)",
+              border: "1px solid rgba(185,255,102,0.22)",
+              color: BRAND.lime,
+              fontSize: 19,
+              fontWeight: 760,
+              letterSpacing: "0.16em",
             }}
           >
-            VANE // HERMES AGENT
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 999,
+                background: BRAND.mint,
+                boxShadow: `0 0 18px ${BRAND.mint}`,
+              }}
+            />
+            VANE // CHUTES.AI
           </div>
+
           <div
             style={{
-              fontSize: 20,
-              letterSpacing: "0.2em",
-              color: "rgba(148, 163, 184, 0.9)",
-              fontWeight: 700,
+              fontSize: 19,
+              letterSpacing: "0.22em",
+              color: BRAND.subtext,
+              fontWeight: 760,
             }}
           >
-            CHUTES.AI TEAM DEMO
+            TEAM DEMO // SILENT CUT
           </div>
         </div>
 
@@ -499,54 +799,7 @@ export const VaneIntro = () => {
           ))}
         </div>
 
-        <div
-          style={{
-            marginTop: 20,
-            display: "grid",
-            gridTemplateColumns: "1.5fr 1fr",
-            gap: 26,
-            alignItems: "end",
-          }}
-        >
-          <Caption text={caption.text} />
-
-          <div style={{...cardBase, padding: "22px 24px"}}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: 14,
-                color: "rgba(148, 163, 184, 0.86)",
-                fontWeight: 650,
-                fontSize: 18,
-                letterSpacing: "0.12em",
-              }}
-            >
-              <span>PROGRESS</span>
-              <span>{String(Math.floor(frame / fps)).padStart(2, "0")}s</span>
-            </div>
-            <div
-              style={{
-                height: 14,
-                borderRadius: 999,
-                background: "rgba(30, 41, 59, 0.92)",
-                overflow: "hidden",
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.04)",
-              }}
-            >
-              <div
-                style={{
-                  height: "100%",
-                  width: `${(frame / durationInFrames) * 100}%`,
-                  borderRadius: 999,
-                  background: "linear-gradient(90deg, #67e8f9 0%, #60a5fa 45%, #a78bfa 100%)",
-                  boxShadow: "0 0 24px rgba(103, 232, 249, 0.35)",
-                }}
-              />
-            </div>
-          </div>
-        </div>
+        <Footer frame={frame} fps={fps} durationInFrames={durationInFrames} text={footer.text} />
       </div>
     </AbsoluteFill>
   );
